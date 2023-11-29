@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Random;
 
 public class Vector <X> implements Cloneable
@@ -12,6 +13,11 @@ public class Vector <X> implements Cloneable
       //this.elem = new X [Vector.TAMANHO_INICIAL]; <- nao compila
         this.elem = new Object [Vector.TAMANHO_INICIAL];
         this.qtd  = 0;
+    }
+
+    public Vector(Object[] elem){
+        this.elem = elem;
+        this.qtd = elem.length;
     }
 
     public int size ()
@@ -65,7 +71,27 @@ public class Vector <X> implements Cloneable
             this.redimensioneSe (0.5F);
     }
 
-    @Override
+        public void embaralhaVetor(){
+        // instancia o random
+        Random rand = new Random();
+		
+        // loop para embaralhar o Vector
+		for (int i = 0; i < this.qtd; i++) {
+            // gera um número aleatorio para trocar de lugar
+			int randomIndexToSwap = rand.nextInt(this.qtd);
+            // salva o valor que está presente no index do número gerado (randomIndexToSwap)
+			int temp = (int) this.elem[randomIndexToSwap];
+            // coloca o elemento presente no posição i no index gerado (randomIndexToSwap)
+			this.elem[randomIndexToSwap] = this.elem[i];
+            // coloca o elemento presente no index gerado (randomIndexToSwap) no index i
+			this.elem[i] = temp;
+		}
+        //System.out.println(this);
+    }
+
+    public Vector<X> divideVetor(int inicio, int fim){
+       return new Vector<X>(Arrays.copyOfRange(this.elem, inicio, fim));
+    }
     public String toString ()
     {
         String ret="[";
@@ -141,24 +167,6 @@ public class Vector <X> implements Cloneable
         {} // ignoro, pq sei que no try nao ocorrera excecoes
 
         return ret;
-    }
-
-    public void embaralhaVetor(){
-        // instancia o random
-        Random rand = new Random();
-		
-        // loop para embaralhar o Vector
-		for (int i = 0; i < this.qtd; i++) {
-            // gera um número aleatorio para trocar de lugar
-			int randomIndexToSwap = rand.nextInt(this.qtd);
-            // salva o valor que está presente no index do número gerado (randomIndexToSwap)
-			int temp = (int) this.elem[randomIndexToSwap];
-            // coloca o elemento presente no posição i no index gerado (randomIndexToSwap)
-			this.elem[randomIndexToSwap] = this.elem[i];
-            // coloca o elemento presente no index gerado (randomIndexToSwap) no index i
-			this.elem[i] = temp;
-		}
-        //System.out.println(this);
     }
 
 

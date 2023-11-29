@@ -1,45 +1,55 @@
-public class ThreadProcuradora extends Thread
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+public class ConnectionThread extends Thread
 {
-    
+    private String ip;
+    private int port;
+    private Vector<Integer> vet;
+    private int num;
+    private int ordem;
+    private Socket conexao;
+    private ObjectInputStream ois;
+    private ObjectOutputStream oos;
+    private Integer resposta;
 
-    private boolean fim = false;
-    private Vector<Integer> armz;
-    private int i;
-    private int f;
-    private int valor;
-    private int posicao = -1;
 
     
-    public ThreadProcuradora (Vector<Integer> armz, int i, int f, int valor)
+    public ConnectionThread (String ip, int port, Vector<Integer> vet, int num, int ordem)
     {
-        this.armz = armz;
-        this.i = i;
-        this.f = f;
-        this.valor = valor;
+        this.ip = ip;
+        this.port = port;
+        this.vet = vet;
+        this.num = num;
+        this.ordem = ordem;
     }
     
     
-
-    public void morra ()
-    {
-        this.fim=true;
-    }
 
     public void run ()
     {
-        for (int k = i;k<=f;k++){
-            if (this.valor == this.armz.get(k)) {
-                this.posicao = k;
-                break;
-            }
+        try {
+            abrePedido();
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Erro ao conseguir resposta do ip " + ip + " Error: " + e);
         }
     }
 
-    public int getPosicao(){
-        return this.posicao;
+    private void abrePedido() throws UnknownHostException, IOException, ClassNotFoundException{
+        this.conexao = new Socket(ip, port);
+        this.ois = new ObjectInputStream(conexao.getInputStream());
+        this.oos = new ObjectOutputStream(conexao.getOutputStream());
+        Object[] obj = {this.ordem, this.num, this.vet.size(), this.vet};
+        oos.writeObject(obj);
+        this.resposta = (Integer) ois.readObject();
     }
-    
-    public int getValor(){
-        return this.valor;
+
+    public Integer getResposta(){
+        return this.resposta;
     }
+
+
 }
