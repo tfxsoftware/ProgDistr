@@ -40,11 +40,19 @@ public class ConnectionThread extends Thread
 
     private void abrePedido() throws UnknownHostException, IOException, ClassNotFoundException{
         this.conexao = new Socket(ip, port);
-        this.ois = new ObjectInputStream(conexao.getInputStream());
+        
+        
+        
         this.oos = new ObjectOutputStream(conexao.getOutputStream());
+        
         Object[] obj = {this.ordem, this.num, this.vet.size(), this.vet};
+        
         oos.writeObject(obj);
+        
+        this.ois = new ObjectInputStream(conexao.getInputStream());
+        
         this.resposta = (Integer) ois.readObject();
+        
     }
 
     public Integer getResposta(){
