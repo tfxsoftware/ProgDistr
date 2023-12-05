@@ -26,7 +26,7 @@ public class Main {
         //dividindo tarefas
         for (int i = 0;i < ips.length;i++){
             Vector<Integer> vetorDividido = vetorGigante.divideVetor(inicio, fim);
-            ConnectionThread conexao = new ConnectionThread(ips[0], porta, vetorDividido, numASerProcurado, i);
+            ConnectionThread conexao = new ConnectionThread(ips[i], porta, vetorDividido, numASerProcurado, i);
             inicio = fim + 1;
             fim = fim + range;
             conexoes[i] = conexao;
@@ -38,7 +38,6 @@ public class Main {
         for (int i = 0;i < ips.length;i++){
             try {
                 conexoes[i].join();
-                System.out.println("aqui2");
                 if (conexoes[i].getResposta() != null) {
                     System.out.println("Endereço: " + ips[i] + " encontrou o número " + numASerProcurado + " na posicao: " + conexoes[i].getResposta());
                 }
